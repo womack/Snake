@@ -14,7 +14,6 @@ let appleY = gridSize / 2 + 5;
 //Player state
 let trail = [];
 let tail = 5;
-let score = 0;
 let velocityX = 0;
 let velocityY = 0;
 
@@ -41,9 +40,11 @@ let game = () => {
     if (playerY > tileCount - 1) {
         playerY = 0
     }
-
+    //Draw Board
     context.fillStyle = "black";
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillRect(0, 0, canvas.width, canvas.height - 20);
+
+    //Draw Player
     context.fillStyle = "lime";
     for (let i = 0; i < trail.length; i++) {
         context.fillRect(trail[i].x * gridSize, trail[i].y * gridSize, gridSize - 2, gridSize - 2);
@@ -60,8 +61,16 @@ let game = () => {
         appleX = Math.floor(Math.random() * tileCount);
         appleY = Math.floor(Math.random() * tileCount);
     }
+    //Draw Apple
     context.fillStyle = "red";
     context.fillRect(appleX * gridSize, appleY * gridSize, gridSize - 2, gridSize - 2);
+
+    //Draw Score
+    context.lineWidth = 1;
+    context.fillStyle = "#CC00FF";
+    context.lineStyle = "#ffff00";
+    context.font = "18px sans-serif";
+    context.fillText(tail - 5, 0, canvas.height - 20);
 }
 
 let keyPush = (event) => {
@@ -83,4 +92,11 @@ let keyPush = (event) => {
             velocityY = 1;
             break;
     }
+}
+
+let checkVelocity = (requestedX, requestedY) => {
+    if (requestedX * velocityX < 0 || requestedY * velocityY < 0) {
+        return false;
+    }
+    return true;
 }
