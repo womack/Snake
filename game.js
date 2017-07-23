@@ -8,26 +8,26 @@ let tileCount = gridSize;
 //Object co-ords
 let playerX = gridSize / 2;
 let playerY = gridSize / 2;
-let appleX = gridSize / 2 + 5;
-let appleY = gridSize / 2 + 5;
+let apple = { color: "red", x: gridSize / 2 + 5, y: gridSize / 2 + 5 };
+
 
 //Player state
 let trail = [];
 let tail = 5;
-let velocityX = 0;
-let velocityY = 0;
+let velocity = { x: 1, y: 0 };
+let difficulty = 1;
 
 window.onload = () => {
     //Board, Events, Game timer.
     canvas = document.getElementById("cnvs");
     context = canvas.getContext("2d");
     document.addEventListener("keydown", keyPush);
-    setInterval(game, 1000 / 15);
+    setInterval(game, 1000 / (10 + difficulty * 5));
 }
 
 let game = () => {
-    playerX += velocityX;
-    playerY += velocityY;
+    playerX += velocity.x;
+    playerY += velocity.y;
     if (playerX < 0) {
         playerX = tileCount - 1;
     }
@@ -56,47 +56,59 @@ let game = () => {
     while (trail.length > tail) {
         trail.shift();
     }
-    if (appleX == playerX && appleY == playerY) {
+    if (apple.x == playerX && apple.y == playerY) {
         tail++;
-        appleX = Math.floor(Math.random() * tileCount);
-        appleY = Math.floor(Math.random() * tileCount);
+      Object.assign(apple, getRandomCoords(tileCount));
     }
-    //Draw Apple
-    context.fillStyle = "red";
-    context.fillRect(appleX * gridSize, appleY * gridSize, gridSize - 2, gridSize - 2);
+    drawApple(apple);
+    drawScore(tail - 5);
 
-    //Draw Score
+}
+
+let getRandomCoords = (boundary) => {
+    let x = Math.floor(Math.random() * boundary);
+    let y = Math.floor(Math.random() * boundary);
+    return { x: x, y: y };
+}
+
+let drawApple = ({ color, x, y }) => {
+    context.fillStyle = color;
+    context.fillRect(x * gridSize, y * gridSize, gridSize - 2, gridSize - 2);
+}
+
+let drawScore = (score) => {
     context.lineWidth = 1;
     context.fillStyle = "#CC00FF";
     context.lineStyle = "#ffff00";
     context.font = "18px sans-serif";
-    context.fillText(tail - 5, 0, canvas.height - 20);
+    context.fillText(score, 0, canvas.height - 20);
 }
 
 let keyPush = (event) => {
-    switch (event.keyCode) {
+    velocity = getVelocityFromDirection(event.keyCode);
+}
+let getVelocityFromDirection = (keyCode) => {
+    let tmp = {};
+    switch (keyCode) {
         case 37:
-            velocityX = -1;
-            velocityY = 0;
+            tmp = changeVelocity(-1, 0);
             break;
         case 38:
-            velocityX = 0;
-            velocityY = -1;
+            tmp = changeVelocity(0, -1);
             break;
         case 39:
-            velocityX = 1;
-            velocityY = 0;
+            tmp = changeVelocity(1, 0);
             break;
         case 40:
-            velocityX = 0;
-            velocityY = 1;
+            tmp = changeVelocity(0, 1);
             break;
     }
+    return tmp;
 }
-
-let checkVelocity = (requestedX, requestedY) => {
-    if (requestedX * velocityX < 0 || requestedY * velocityY < 0) {
-        return false;
+let changeVelocity = (requestedX, requestedY) => {
+    if (!((requestedX * velocity.x < 0) || (requestedY * velocity.y < 0))) {
+        return { x: requestedX, y: requestedY };
+    } else {
+        return velocity;
     }
-    return true;
 }
