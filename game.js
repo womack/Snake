@@ -10,21 +10,34 @@ let playerX = gridSize / 2;
 let playerY = gridSize / 2;
 let apple = { color: "red", x: gridSize / 2 + 5, y: gridSize / 2 + 5 };
 
-
 //Player state
 let trail = [];
 let tail = 5;
 let velocity = { x: 1, y: 0 };
 let difficulty = 1;
 
-//Board, Events, Game timer.
-window.onload = () => {
-    canvas = document.getElementById("cnvs");
-    context = canvas.getContext("2d");
-    document.addEventListener("keydown", keyPush);
-    setInterval(game, 1000 / (10 + difficulty * 5));
-};
+//Return a random co-ordinate, for food spawns
+let getRandomCoords = (boundary) => {
+    let x = Math.floor(Math.random() * boundary);
+    let y = Math.floor(Math.random() * boundary);
+    return { x, y };
+}
 
+//Drawing a food object, that contains the color to draw and the coordinates.
+let drawApple = ({ color, x, y }) => {
+    context.fillStyle = color;
+    context.fillRect(x * gridSize, y * gridSize, gridSize - 2, gridSize - 2);
+}
+
+let drawScore = (score) => {
+    context.lineWidth = 1;
+    context.fillStyle = "#CC00FF";
+    context.lineStyle = "#ffff00";
+    context.font = "18px sans-serif";
+    context.fillText(score, 0, canvas.height - 20);
+}
+
+//Main game loop
 let game = () => {
 
     //Movement
@@ -71,28 +84,15 @@ let game = () => {
 
 };
 
-//Return a random co-ordinate, for food spawns
-let getRandomCoords = (boundary) => {
-    let x = Math.floor(Math.random() * boundary);
-    let y = Math.floor(Math.random() * boundary);
-    return { x, y };
-}
 
-let drawApple = ({ color, x, y }) => {
-    context.fillStyle = color;
-    context.fillRect(x * gridSize, y * gridSize, gridSize - 2, gridSize - 2);
-}
 
-let drawScore = (score) => {
-    context.lineWidth = 1;
-    context.fillStyle = "#CC00FF";
-    context.lineStyle = "#ffff00";
-    context.font = "18px sans-serif";
-    context.fillText(score, 0, canvas.height - 20);
-}
-
-let keyPush = (event) => {
-    velocity = getVelocityFromDirection(event.keyCode);
+//In attempt to stop player doing a complete 360 with concurrent keypresses, still buggy currently.
+let changeVelocity = (requestedX, requestedY) => {
+    if (!((requestedX * velocity.x < 0) || (requestedY * velocity.y < 0))) {
+        return { x: requestedX, y: requestedY };
+    } else {
+        return velocity;
+    }
 }
 
 let getVelocityFromDirection = (keyCode) => {
@@ -114,11 +114,16 @@ let getVelocityFromDirection = (keyCode) => {
     return tmp;
 }
 
-//In attempt to stop player doing a complete 360 with concurrent keypresses, still buggy currently.
-let changeVelocity = (requestedX, requestedY) => {
-    if (!((requestedX * velocity.x < 0) || (requestedY * velocity.y < 0))) {
-        return { x: requestedX, y: requestedY };
-    } else {
-        return velocity;
-    }
+let keyPush = (event) => {
+    velocity = getVelocityFromDirection(event.keyCode);
 }
+
+
+
+//Board, Events, Game timer.
+window.onload = () => {
+    canvas = document.getElementById("cnvs");
+    context = canvas.getContext("2d");
+    document.addEventListener("keydown", keyPush);
+    setInterval(game, 1000 / (10 + difficulty * 5));
+};
