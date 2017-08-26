@@ -23,7 +23,7 @@ window.onload = () => {
     context = canvas.getContext("2d");
     document.addEventListener("keydown", keyPush);
     setInterval(game, 1000 / (10 + difficulty * 5));
-}
+};
 
 let game = () => {
 
@@ -34,13 +34,13 @@ let game = () => {
         playerX = tileCount - 1;
     }
     if (playerX > tileCount - 1) {
-        playerX = 0
+        playerX = 0;
     }
     if (playerY < 0) {
         playerY = tileCount - 1;
     }
     if (playerY > tileCount - 1) {
-        playerY = 0
+        playerY = 0;
     }
 
     //Draw Board
@@ -69,13 +69,13 @@ let game = () => {
     //Draw Current Score
     drawScore(tail - 5);
 
-}
+};
 
 //Return a random co-ordinate, for food spawns
 let getRandomCoords = (boundary) => {
     let x = Math.floor(Math.random() * boundary);
     let y = Math.floor(Math.random() * boundary);
-    return { x: x, y: y };
+    return { x, y };
 }
 
 let drawApple = ({ color, x, y }) => {
