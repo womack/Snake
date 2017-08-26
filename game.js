@@ -64,7 +64,7 @@ let game = () => {
     context.fillStyle = "lime";
     for (let i = 0; i < trail.length; i++) {
         context.fillRect(trail[i].x * gridSize, trail[i].y * gridSize, gridSize - 2, gridSize - 2);
-        if (trail[i].x == playerX && trail[i].y == playerY) {
+        if (trail[i].x === playerX && trail[i].y === playerY) {
             tail = 5;
         }
     }
@@ -72,7 +72,7 @@ let game = () => {
     while (trail.length > tail) {
         trail.shift();
     }
-    if (apple.x == playerX && apple.y == playerY) {
+    if (apple.x === playerX && apple.y === playerY) {
         tail++;
         Object.assign(apple, getRandomCoords(tileCount));
     }
@@ -83,8 +83,6 @@ let game = () => {
     drawScore(tail - 5);
 
 };
-
-
 
 //In attempt to stop player doing a complete 360 with concurrent keypresses, still buggy currently.
 let changeVelocity = (requestedX, requestedY) => {
@@ -117,8 +115,6 @@ let getVelocityFromDirection = (keyCode) => {
 let keyPush = (event) => {
     velocity = getVelocityFromDirection(event.keyCode);
 }
-
-
 
 //Board, Events, Game timer.
 window.onload = () => {
