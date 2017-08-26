@@ -1,0 +1,5 @@
+{
+    "beautify.onSave": true,
+    "editor.formatOnSave": true,
+    "git.enableSmartCommit": true
+}

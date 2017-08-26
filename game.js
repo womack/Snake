@@ -17,8 +17,8 @@ let tail = 5;
 let velocity = { x: 1, y: 0 };
 let difficulty = 1;
 
+//Board, Events, Game timer.
 window.onload = () => {
-    //Board, Events, Game timer.
     canvas = document.getElementById("cnvs");
     context = canvas.getContext("2d");
     document.addEventListener("keydown", keyPush);
@@ -26,6 +26,8 @@ window.onload = () => {
 }
 
 let game = () => {
+
+    //Movement
     playerX += velocity.x;
     playerY += velocity.y;
     if (playerX < 0) {
@@ -40,6 +42,7 @@ let game = () => {
     if (playerY > tileCount - 1) {
         playerY = 0
     }
+
     //Draw Board
     context.fillStyle = "black";
     context.fillRect(0, 0, canvas.width, canvas.height - 20);
@@ -58,13 +61,17 @@ let game = () => {
     }
     if (apple.x == playerX && apple.y == playerY) {
         tail++;
-      Object.assign(apple, getRandomCoords(tileCount));
+        Object.assign(apple, getRandomCoords(tileCount));
     }
+    //Draw Food/Apple
     drawApple(apple);
+
+    //Draw Current Score
     drawScore(tail - 5);
 
 }
 
+//Return a random co-ordinate, for food spawns
 let getRandomCoords = (boundary) => {
     let x = Math.floor(Math.random() * boundary);
     let y = Math.floor(Math.random() * boundary);
@@ -87,6 +94,7 @@ let drawScore = (score) => {
 let keyPush = (event) => {
     velocity = getVelocityFromDirection(event.keyCode);
 }
+
 let getVelocityFromDirection = (keyCode) => {
     let tmp = {};
     switch (keyCode) {
@@ -105,6 +113,8 @@ let getVelocityFromDirection = (keyCode) => {
     }
     return tmp;
 }
+
+//In attempt to stop player doing a complete 360 with concurrent keypresses, still buggy currently.
 let changeVelocity = (requestedX, requestedY) => {
     if (!((requestedX * velocity.x < 0) || (requestedY * velocity.y < 0))) {
         return { x: requestedX, y: requestedY };
