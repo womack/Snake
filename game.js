@@ -10,12 +10,19 @@ let playerX = gridSize / 2;
 let playerY = gridSize / 2;
 let apple = { color: "red", x: gridSize / 2 + 5, y: gridSize / 2 + 5 };
 
-
 //Player state
 let trail = [];
 let tail = 5;
 let velocity = { x: 1, y: 0 };
 let difficulty = 1;
+
+//arrow keys with movement coords
+let velocityLookup = {
+    37: { x: -1, y: 0 },
+    38: { x: 0, y: -1 },
+    39: { x: 1, y: 0 },
+    40: { x: 0, y: 1 }
+};
 
 window.onload = () => {
     //Board, Events, Game timer.
@@ -58,23 +65,22 @@ let game = () => {
     }
     if (apple.x == playerX && apple.y == playerY) {
         tail++;
-      Object.assign(apple, getRandomCoords(tileCount));
+        Object.assign(apple, getRandomCoords(tileCount));
     }
     drawApple(apple);
     drawScore(tail - 5);
-
-}
+};
 
 let getRandomCoords = (boundary) => {
     let x = Math.floor(Math.random() * boundary);
     let y = Math.floor(Math.random() * boundary);
     return { x: x, y: y };
-}
+};
 
 let drawApple = ({ color, x, y }) => {
     context.fillStyle = color;
     context.fillRect(x * gridSize, y * gridSize, gridSize - 2, gridSize - 2);
-}
+};
 
 let drawScore = (score) => {
     context.lineWidth = 1;
@@ -82,33 +88,22 @@ let drawScore = (score) => {
     context.lineStyle = "#ffff00";
     context.font = "18px sans-serif";
     context.fillText(score, 0, canvas.height - 20);
-}
+};
 
 let keyPush = (event) => {
     velocity = getVelocityFromDirection(event.keyCode);
-}
+};
+
 let getVelocityFromDirection = (keyCode) => {
-    let tmp = {};
-    switch (keyCode) {
-        case 37:
-            tmp = changeVelocity(-1, 0);
-            break;
-        case 38:
-            tmp = changeVelocity(0, -1);
-            break;
-        case 39:
-            tmp = changeVelocity(1, 0);
-            break;
-        case 40:
-            tmp = changeVelocity(0, 1);
-            break;
-    }
-    return tmp;
-}
+    let lookup = velocityLookup[keyCode];
+    if (lookup)
+        return changeVelocity(lookup.x, lookup.y);
+};
+
 let changeVelocity = (requestedX, requestedY) => {
     if (!((requestedX * velocity.x < 0) || (requestedY * velocity.y < 0))) {
         return { x: requestedX, y: requestedY };
     } else {
         return velocity;
     }
-}
+};
