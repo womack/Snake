@@ -94,7 +94,7 @@ let changeVelocity = (requestedX, requestedY) => {
 }
 
 let getVelocityFromDirection = (keyCode) => {
-    let tmp = {};
+    let tmp;
     switch (keyCode) {
         case 37:
             tmp = changeVelocity(-1, 0);
@@ -113,7 +113,7 @@ let getVelocityFromDirection = (keyCode) => {
 }
 
 let keyPush = (event) => {
-    velocity = getVelocityFromDirection(event.keyCode);
+    velocity = getVelocityFromDirection(event.keyCode) || velocity;
 }
 
 //Board, Events, Game timer.
