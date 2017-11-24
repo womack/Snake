@@ -1,2 +1,9 @@
 {
+<<<<<<< HEAD
+=======
+    "beautify.onSave": true,
+    "editor.formatOnSave": true,
+    "git.enableSmartCommit": true,
+    "git.confirmSync": false
+>>>>>>> 62fa381827b01676a3fe19a08dc9b991d3cebe4e
 }
