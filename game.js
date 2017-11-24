@@ -16,7 +16,6 @@ let tail = 5;
 let velocity = { x: 1, y: 0 };
 let difficulty = 1;
 
-<<<<<<< HEAD
 //arrow keys with movement coords
 let velocityLookup = {
     37: { x: -1, y: 0 },
@@ -31,13 +30,6 @@ window.onload = () => {
     context = canvas.getContext("2d");
     document.addEventListener("keydown", keyPush);
     setInterval(game, 1000 / (10 + difficulty * 5));
-=======
-//Return a random co-ordinate, for food spawns
-let getRandomCoords = (boundary) => {
-    let x = Math.floor(Math.random() * boundary);
-    let y = Math.floor(Math.random() * boundary);
-    return { x, y };
->>>>>>> 62fa381827b01676a3fe19a08dc9b991d3cebe4e
 }
 
 //Drawing a food object, that contains the color to draw and the coordinates.
@@ -95,7 +87,6 @@ let game = () => {
     }
     //Draw Food/Apple
     drawApple(apple);
-<<<<<<< HEAD
     drawScore(tail - 5);
 };
 
@@ -135,50 +126,3 @@ let changeVelocity = (requestedX, requestedY) => {
         return velocity;
     }
 };
-=======
-
-    //Draw Current Score
-    drawScore(tail - 5);
-
-};
-
-//In attempt to stop player doing a complete 360 with concurrent keypresses, still buggy currently.
-let changeVelocity = (requestedX, requestedY) => {
-    if (!((requestedX * velocity.x < 0) || (requestedY * velocity.y < 0))) {
-        return { x: requestedX, y: requestedY };
-    } else {
-        return velocity;
-    }
-}
-
-let getVelocityFromDirection = (keyCode) => {
-    let tmp;
-    switch (keyCode) {
-        case 37:
-            tmp = changeVelocity(-1, 0);
-            break;
-        case 38:
-            tmp = changeVelocity(0, -1);
-            break;
-        case 39:
-            tmp = changeVelocity(1, 0);
-            break;
-        case 40:
-            tmp = changeVelocity(0, 1);
-            break;
-    }
-    return tmp;
-}
-
-let keyPush = (event) => {
-    velocity = getVelocityFromDirection(event.keyCode) || velocity;
-}
-
-//Board, Events, Game timer.
-window.onload = () => {
-    canvas = document.getElementById("cnvs");
-    context = canvas.getContext("2d");
-    document.addEventListener("keydown", keyPush);
-    setInterval(game, 1000 / (10 + difficulty * 5));
-};
->>>>>>> 62fa381827b01676a3fe19a08dc9b991d3cebe4e
