@@ -96,19 +96,6 @@ let getRandomCoords = (boundary) => {
     return { x: x, y: y };
 };
 
-let drawApple = ({ color, x, y }) => {
-    context.fillStyle = color;
-    context.fillRect(x * gridSize, y * gridSize, gridSize - 2, gridSize - 2);
-};
-
-let drawScore = (score) => {
-    context.lineWidth = 1;
-    context.fillStyle = "#CC00FF";
-    context.lineStyle = "#ffff00";
-    context.font = "18px sans-serif";
-    context.fillText(score, 0, canvas.height - 20);
-};
-
 let keyPush = (event) => {
     velocity = getVelocityFromDirection(event.keyCode);
 };
